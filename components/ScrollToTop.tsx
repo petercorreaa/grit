@@ -35,7 +35,7 @@ export default function ScrollToTop() {
                      flex items-center justify-center cursor-pointer
                      text-[#0a0f0a] font-bold"
           style={{
-            background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)",
+            background: "#00c853",
             boxShadow: "0 4px 20px rgba(0,200,83,0.35)",
           }}
         >

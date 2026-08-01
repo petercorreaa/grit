@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -66,38 +67,29 @@ export default function Navbar() {
         initial={shouldReduce ? false : { y: -72, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background,border-color,box-shadow,padding] duration-400 ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-[#0b0f0b] transition-[border-color,box-shadow,padding] duration-400 ${
           scrolled
-            ? "bg-[rgba(10,15,10,0.82)] backdrop-blur-xl border-b border-[rgba(0,200,83,0.14)] shadow-[0_4px_32px_rgba(0,0,0,0.45)] py-3"
-            : "bg-transparent py-5"
+            ? "border-b border-[rgba(0,200,83,0.14)] shadow-[0_4px_32px_rgba(0,0,0,0.45)] py-4"
+            : "border-b border-transparent py-6"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between gap-6">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 flex items-center justify-between gap-8">
 
           {/* ── Logo ── */}
           <Link
             href="/"
             onClick={() => setActive("/")}
-            className="flex items-center gap-2.5 group flex-shrink-0"
+            className="flex items-center flex-shrink-0"
             aria-label="GRIT Capital Group — inicio"
           >
-            {/* Wordmark */}
-            <span className="relative font-black text-xl tracking-[-0.03em] text-[#f0f0f0] leading-none select-none">
-              GRIT
-              {/* Green gradient underline accent */}
-              <span
-                className="absolute -bottom-0.5 left-0 w-full h-[2px] rounded-full"
-                style={{
-                  background: "linear-gradient(90deg, #00c853 0%, #69f0ae 100%)",
-                  opacity: 0.85,
-                }}
-              />
-            </span>
-            {/* Accent dot */}
-            <span className="relative flex-shrink-0">
-              <span className="block w-[7px] h-[7px] rounded-full bg-[#00c853]" />
-              <span className="absolute inset-0 rounded-full bg-[#00c853] blur-[5px] opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
-            </span>
+            <Image
+              src="/images/logo-blanco.png"
+              alt="GRIT Capital Group"
+              width={130}
+              height={60}
+              priority
+              className="h-12 w-auto"
+            />
           </Link>
 
           {/* ── Desktop nav ── */}
@@ -105,12 +97,12 @@ export default function Navbar() {
             variants={navContainerVariants}
             initial="hidden"
             animate="visible"
-            className="hidden md:flex items-center gap-7"
+            className="hidden md:flex items-center gap-8"
             aria-label="Navegación principal"
           >
             {NAV_LINKS.map((link) => {
               const isActive = active === link.href;
-              const sharedClass = `relative text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors duration-200 py-1 ${
+              const sharedClass = `relative text-base font-semibold uppercase tracking-[0.12em] transition-colors duration-200 py-1 ${
                 isActive ? "text-[#f0f0f0]" : "text-[#8a9e8a] hover:text-[#f0f0f0]"
               }`;
               const indicator = isActive && (
@@ -156,22 +148,22 @@ export default function Navbar() {
             {/* Ghost */}
             <a
               href="#contacto"
-              className="px-4 py-[7px] text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8a9e8a] border border-[rgba(0,200,83,0.22)] rounded-sm hover:text-[#f0f0f0] hover:border-[rgba(0,200,83,0.45)] transition-all duration-200"
+              className="px-5 py-2.5 text-base font-semibold uppercase tracking-[0.1em] text-[#8a9e8a] border border-[rgba(0,200,83,0.22)] rounded-lg hover:text-[#f0f0f0] hover:border-[rgba(0,200,83,0.45)] transition-all duration-200"
             >
               Ingresar
             </a>
             {/* Solid gradient CTA */}
-            <a
-              href="#contacto"
-              className="relative px-5 py-[7px] text-[11px] font-bold uppercase tracking-[0.1em] text-[#0a0f0a] rounded-sm overflow-hidden group"
+            <Link
+              href="/apertura-de-cuenta"
+              className="relative px-6 py-2.5 text-base font-bold uppercase tracking-[0.1em] text-[#0a0f0a] rounded-lg overflow-hidden group"
               style={{
-                background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)",
+                background: "#00c853",
               }}
             >
               {/* Hover sheen */}
               <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               <span className="relative">Abrir Cuenta</span>
-            </a>
+            </Link>
           </motion.div>
 
           {/* ── Mobile hamburger ── */}
@@ -182,7 +174,7 @@ export default function Navbar() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={open}
-            className="md:hidden relative w-9 h-9 flex items-center justify-center text-[#f0f0f0] flex-shrink-0"
+            className="md:hidden relative w-11 h-11 flex items-center justify-center text-[#f0f0f0] flex-shrink-0"
           >
             <AnimatePresence mode="wait" initial={false}>
               {open ? (
@@ -193,7 +185,7 @@ export default function Navbar() {
                   exit={{ rotate: 45, opacity: 0 }}
                   transition={{ duration: 0.18 }}
                 >
-                  <X size={20} strokeWidth={2} />
+                  <X size={24} strokeWidth={2} />
                 </motion.span>
               ) : (
                 <motion.span
@@ -203,7 +195,7 @@ export default function Navbar() {
                   exit={{ rotate: -45, opacity: 0 }}
                   transition={{ duration: 0.18 }}
                 >
-                  <Menu size={20} strokeWidth={2} />
+                  <Menu size={24} strokeWidth={2} />
                 </motion.span>
               )}
             </AnimatePresence>
@@ -221,7 +213,7 @@ export default function Navbar() {
             initial="closed"
             animate="open"
             exit="exit"
-            className="fixed top-0 left-0 right-0 z-40 pt-[64px] md:hidden"
+            className="fixed top-0 left-0 right-0 z-40 pt-[97px] md:hidden"
           >
             {/* Backdrop */}
             <motion.div
@@ -229,7 +221,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 bg-[rgba(10,15,10,0.96)] backdrop-blur-xl"
+              className="absolute inset-0 bg-[#0b0f0b]"
               onClick={() => setOpen(false)}
             />
 
@@ -240,13 +232,13 @@ export default function Navbar() {
                 {NAV_LINKS.map((link, i) => {
                   const mobileInner = (
                     <>
-                      <span className="text-sm font-semibold uppercase tracking-[0.12em] text-[#f0f0f0] group-hover:text-accent transition-colors duration-200">
+                      <span className="text-lg font-semibold uppercase tracking-[0.12em] text-[#f0f0f0] group-hover:text-accent transition-colors duration-200">
                         {link.label}
                       </span>
-                      <span className="text-[#8a9e8a] group-hover:text-accent transition-colors duration-200 text-xs">→</span>
+                      <span className="text-[#8a9e8a] group-hover:text-accent transition-colors duration-200 text-base">→</span>
                     </>
                   );
-                  const mobileClass = "flex items-center justify-between py-3.5 border-b border-[rgba(0,200,83,0.07)] group";
+                  const mobileClass = "flex items-center justify-between py-4 border-b border-[rgba(0,200,83,0.07)] group";
                   const mobileMotion = {
                     initial:    { opacity: 0, x: -12 },
                     animate:    { opacity: 1, x: 0 },
@@ -286,20 +278,20 @@ export default function Navbar() {
                 <a
                   href="#contacto"
                   onClick={() => setOpen(false)}
-                  className="w-full text-center py-3 text-xs font-semibold uppercase tracking-[0.1em] text-[#8a9e8a] border border-[rgba(0,200,83,0.22)] rounded-sm hover:text-[#f0f0f0] hover:border-[rgba(0,200,83,0.45)] transition-all duration-200"
+                  className="w-full text-center py-3.5 text-base font-semibold uppercase tracking-[0.1em] text-[#8a9e8a] border border-[rgba(0,200,83,0.22)] rounded-lg hover:text-[#f0f0f0] hover:border-[rgba(0,200,83,0.45)] transition-all duration-200"
                 >
                   Ingresar
                 </a>
-                <a
-                  href="#contacto"
+                <Link
+                  href="/apertura-de-cuenta"
                   onClick={() => setOpen(false)}
-                  className="w-full text-center py-3 text-xs font-bold uppercase tracking-[0.1em] text-[#0a0f0a] rounded-sm"
+                  className="w-full text-center py-3.5 text-base font-bold uppercase tracking-[0.1em] text-[#0a0f0a] rounded-lg"
                   style={{
-                    background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)",
+                    background: "#00c853",
                   }}
                 >
                   Abrir Cuenta
-                </a>
+                </Link>
               </motion.div>
             </div>
           </motion.div>

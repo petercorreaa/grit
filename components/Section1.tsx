@@ -156,14 +156,7 @@ function GeometricGraphic() {
           border: "1px solid rgba(0,200,83,0.3)",
         }}
       >
-        <span
-          className="font-black text-xl tracking-tighter"
-          style={{
-            background: "linear-gradient(135deg, #00c853, #69f0ae)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
+        <span className="font-black text-xl tracking-tighter text-accent">
           G
         </span>
       </motion.div>
@@ -186,7 +179,7 @@ function GeometricGraphic() {
             delay: dot.delay,
             ease: "easeInOut",
           }}
-          className="absolute rounded-sm"
+          className="absolute rounded-lg"
           style={{
             top: "top" in dot ? dot.top : undefined,
             bottom: "bottom" in dot ? dot.bottom : undefined,
@@ -206,19 +199,19 @@ function GeometricGraphic() {
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[10%] right-[8%] glass neon-border rounded-sm px-3 py-2 z-20"
+        className="absolute top-[10%] right-[8%] glass neon-border rounded-lg px-3 py-2 z-20"
       >
-        <p className="text-[10px] text-[#8a9e8a] uppercase tracking-wider">Rendimiento</p>
-        <p className="text-sm font-black text-accent">+18.4%</p>
+        <p className="text-sm text-[#8a9e8a] uppercase tracking-wider">Rendimiento</p>
+        <p className="text-base font-black text-accent">+18.4%</p>
       </motion.div>
 
       <motion.div
         animate={{ y: [0, 6, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-        className="absolute bottom-[14%] left-[6%] glass neon-border rounded-sm px-3 py-2 z-20"
+        className="absolute bottom-[14%] left-[6%] glass neon-border rounded-lg px-3 py-2 z-20"
       >
-        <p className="text-[10px] text-[#8a9e8a] uppercase tracking-wider">Cartera activa</p>
-        <p className="text-sm font-black text-[#f0f0f0]">$500M+</p>
+        <p className="text-sm text-[#8a9e8a] uppercase tracking-wider">Cartera activa</p>
+        <p className="text-base font-black text-[#f0f0f0]">$500M+</p>
       </motion.div>
 
     </div>
@@ -255,21 +248,14 @@ function StatItem({
     >
       <div className="flex items-center gap-2 mb-1">
         <Icon size={14} className="text-accent flex-shrink-0" />
-        <span className="text-[10px] uppercase tracking-[0.15em] text-[#8a9e8a] font-semibold">
+        <span className="text-sm uppercase tracking-[0.15em] text-[#8a9e8a] font-semibold">
           {label}
         </span>
       </div>
       <div className="text-3xl sm:text-4xl font-black tabular-nums leading-none text-[#f0f0f0]">
         <span className="text-[#8a9e8a] text-2xl">{prefix}</span>
         {active ? count.toLocaleString("es-AR") : "0"}
-        <span
-          className="bg-clip-text text-transparent text-3xl"
-          style={{
-            backgroundImage: "linear-gradient(90deg, #00c853, #69f0ae)",
-          }}
-        >
-          {suffix}
-        </span>
+        <span className="text-accent text-3xl">{suffix}</span>
         {unit && (
           <span className="text-lg text-[#8a9e8a] font-normal ml-1">{unit}</span>
         )}
@@ -292,7 +278,7 @@ export default function Section1() {
       id="equipo"
       ref={sectionRef}
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: "#080d08" }}
+      style={{ background: "#0b0f0b" }}
     >
       {/* Section top divider */}
       <div
@@ -316,7 +302,7 @@ export default function Section1() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6">
 
         {/* ── Two-column grid ── */}
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -330,7 +316,7 @@ export default function Section1() {
             {/* Eyebrow */}
             <motion.div variants={slideUp} className="mb-6">
               <span
-                className="inline-flex items-center gap-2 text-[10px] font-bold
+                className="inline-flex items-center gap-2 text-sm font-bold
                            uppercase tracking-[0.2em] text-accent"
               >
                 <span className="block w-6 h-px bg-accent" />
@@ -349,15 +335,7 @@ export default function Section1() {
                 <br />
                 cliente es{" "}
               </span>
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(100deg, #00c853 0%, #69f0ae 60%, #b9f6ca 100%)",
-                }}
-              >
-                ÚNICO
-              </span>
+              <span className="text-accent">ÚNICO</span>
             </motion.h2>
 
             {/* Body */}
@@ -380,7 +358,7 @@ export default function Section1() {
             <motion.div variants={slideUp}>
               <a
                 href="#contacto"
-                className="group inline-flex items-center gap-2 text-sm font-semibold
+                className="group inline-flex items-center gap-2 text-base font-semibold
                            text-accent hover:text-[#69f0ae] transition-colors duration-200"
               >
                 Descubre como podemos ayudarte
@@ -412,7 +390,7 @@ export default function Section1() {
           className="mt-16 md:mt-20"
         >
           <div
-            className="relative rounded-sm overflow-hidden"
+            className="relative rounded-lg overflow-hidden"
             style={{
               background: "rgba(255,255,255,0.025)",
               backdropFilter: "blur(20px)",
@@ -427,7 +405,7 @@ export default function Section1() {
               className="absolute top-0 left-0 right-0 h-[1.5px]"
               style={{
                 background:
-                  "linear-gradient(90deg, transparent 0%, #00c853 30%, #69f0ae 70%, transparent 100%)",
+                  "linear-gradient(90deg, transparent, #00c853, transparent)",
                 opacity: 0.6,
               }}
             />

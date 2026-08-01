@@ -71,16 +71,16 @@ function PillGroup<T extends string>({
             key={opt.value}
             type="button"
             onClick={() => onChange(opt.value)}
-            className="relative px-4 py-1.5 rounded-full text-xs font-semibold
+            className="relative px-4 py-1.5 rounded-full text-sm font-semibold
                        tracking-wide transition-all duration-200 overflow-hidden"
             style={{
               border: selected
-                ? "1px solid rgba(0,200,83,0.5)"
-                : "1px solid rgba(0,200,83,0.18)",
-              color: selected ? "#0a0f0a" : "#8a9e8a",
+                ? "1px solid #00c853"
+                : "1px solid rgba(11,15,11,0.18)",
+              color: selected ? "#0a0f0a" : "#55645a",
             }}
           >
-            {/* Animated gradient fill */}
+            {/* Animated solid fill */}
             <motion.span
               className="absolute inset-0 rounded-full"
               animate={{
@@ -88,9 +88,7 @@ function PillGroup<T extends string>({
                 scale:   selected ? 1 : 0.85,
               }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              style={{
-                background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)",
-              }}
+              style={{ background: "#00c853" }}
             />
             <span className="relative z-10">{opt.label}</span>
           </button>
@@ -116,10 +114,10 @@ function Field({
   const hasError = touched && !!error;
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8a9e8a]">
+      <label className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-muted">
         {label}
         {hasError && (
-          <span className="ml-1 text-[#f44336] normal-case tracking-normal font-normal text-[10px]">
+          <span className="ml-1 text-[#d32f2f] normal-case tracking-normal font-normal text-sm">
             — {error}
           </span>
         )}
@@ -133,12 +131,12 @@ function Field({
 
 function inputClass(hasError: boolean) {
   return [
-    "w-full bg-[rgba(255,255,255,0.03)] rounded-sm px-4 py-3",
-    "text-sm text-[#f0f0f0] placeholder:text-[#8a9e8a]/40",
+    "w-full bg-[#f5f7f5] rounded-lg px-4 py-3",
+    "text-base text-ink placeholder:text-[#55645a]/55",
     "outline-none transition-all duration-200",
     hasError
-      ? "border border-[rgba(244,67,54,0.45)] focus:border-[rgba(244,67,54,0.7)]"
-      : "border border-[rgba(0,200,83,0.12)] focus:border-[rgba(0,200,83,0.45)] focus:shadow-[0_0_0_3px_rgba(0,200,83,0.08)]",
+      ? "border border-[rgba(211,47,47,0.55)] focus:border-[rgba(211,47,47,0.85)]"
+      : "border border-[rgba(11,15,11,0.14)] focus:border-[rgba(0,200,83,0.65)] focus:shadow-[0_0_0_3px_rgba(0,200,83,0.14)]",
   ].join(" ");
 }
 
@@ -160,17 +158,17 @@ function SuccessPanel({ firstName }: { firstName: string }) {
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
       >
-        <CheckCircle2 size={56} className="text-accent" strokeWidth={1.5} />
+        <CheckCircle2 size={56} className="text-accent-ink" strokeWidth={1.5} />
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25, duration: 0.5 }}
       >
-        <h3 className="text-xl font-bold text-[#f0f0f0] mb-2">
+        <h3 className="text-xl font-bold text-ink mb-2">
           ¡Mensaje recibido{firstName ? `, ${firstName}` : ""}!
         </h3>
-        <p className="text-sm text-[#8a9e8a] leading-relaxed max-w-[280px] mx-auto">
+        <p className="text-base text-ink-muted leading-relaxed max-w-[280px] mx-auto">
           Un asesor de GRIT te contactará en las próximas 24 horas hábiles.
         </p>
       </motion.div>
@@ -207,6 +205,7 @@ export default function ContactForm() {
   const [errors,  setErrors]  = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [sent,    setSent]    = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function touch(field: keyof FormState) {
     setTouched((t) => ({ ...t, [field]: true }));
@@ -224,7 +223,7 @@ export default function ContactForm() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     // Touch all validated fields
     setTouched({ nombre: true, email: true, mensaje: true });
@@ -232,11 +231,26 @@ export default function ContactForm() {
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
+    setSubmitError(null);
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? "No se pudo enviar el mensaje.");
+      }
       setSent(true);
-    }, 1400);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "No se pudo enviar el mensaje. Intentá de nuevo."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   const firstName = form.nombre.trim().split(" ")[0] ?? "";
@@ -246,34 +260,19 @@ export default function ContactForm() {
       id="contacto"
       ref={sectionRef}
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: "#080d08" }}
+      style={{ background: "#f5f7f5" }}
     >
-      {/* Background glow */}
-      <div
-        aria-hidden
-        className="absolute bottom-0 left-1/2 -translate-x-1/2
-                   w-[600px] h-[320px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse, rgba(0,200,83,0.10) 0%, transparent 70%)",
-          filter: "blur(50px)",
-        }}
-      />
-
       {/* Top / bottom dividers */}
       {["top-0", "bottom-0"].map((pos) => (
         <div
           key={pos}
           aria-hidden
           className={`absolute ${pos} left-0 right-0 h-px`}
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(0,200,83,0.13) 40%, rgba(0,200,83,0.13) 60%, transparent)",
-          }}
+          style={{ background: "rgba(11,15,11,0.10)" }}
         />
       ))}
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
           {/* ── Left column ── */}
@@ -285,8 +284,8 @@ export default function ContactForm() {
           >
             {/* Eyebrow */}
             <span
-              className="inline-flex items-center gap-2 text-[10px] font-bold
-                         uppercase tracking-[0.2em] text-accent mb-6 block"
+              className="inline-flex items-center gap-2 text-sm font-bold
+                         uppercase tracking-[0.2em] text-accent-ink mb-6 block"
             >
               <span className="block w-6 h-px bg-accent" />
               Contacto
@@ -295,25 +294,16 @@ export default function ContactForm() {
             {/* Headline */}
             <h2
               className="text-[clamp(2.2rem,5vw,3.8rem)] font-black leading-[1.05]
-                         tracking-[-0.025em] mb-5"
+                         tracking-[-0.025em] mb-5 text-ink"
             >
-              <span className="text-[#f0f0f0]">Contac</span>
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(100deg, #00c853 0%, #69f0ae 55%, #f0f0f0 100%)",
-                }}
-              >
-                tanos
-              </span>
+              Contac<span style={{ color: "#00893a" }}>tanos</span>
             </h2>
 
             {/* Subtext */}
-            <p className="text-[0.9375rem] text-[#8a9e8a] leading-[1.78] mb-10 max-w-[400px]">
+            <p className="text-[0.9375rem] text-ink-muted leading-[1.78] mb-10 max-w-[400px]">
               ¿Tenés preguntas, sugerencias o querés saber más sobre nuestros
               servicios?{" "}
-              <span className="text-[#c8d8c8]">Estamos para ayudarte.</span>
+              <span className="text-ink font-medium">Estamos para ayudarte.</span>
             </p>
 
             {/* Contact info */}
@@ -321,19 +311,19 @@ export default function ContactForm() {
               {CONTACT_INFO.map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex items-start gap-4">
                   <div
-                    className="w-8 h-8 rounded-sm flex-shrink-0 flex items-center justify-center mt-0.5"
+                    className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5"
                     style={{
-                      background: "rgba(0,200,83,0.08)",
-                      border: "1px solid rgba(0,200,83,0.14)",
+                      background: "rgba(0,200,83,0.10)",
+                      border: "1px solid rgba(0,200,83,0.25)",
                     }}
                   >
-                    <Icon size={14} className="text-accent" />
+                    <Icon size={14} className="text-accent-ink" />
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.14em] text-[#8a9e8a] mb-0.5 font-semibold">
+                    <p className="text-sm uppercase tracking-[0.14em] text-ink-muted mb-0.5 font-semibold">
                       {label}
                     </p>
-                    <p className="text-sm text-[#f0f0f0]">{value}</p>
+                    <p className="text-base text-ink">{value}</p>
                   </div>
                 </div>
               ))}
@@ -347,25 +337,18 @@ export default function ContactForm() {
             animate={inView ? "show" : "hidden"}
           >
             <div
-              className="relative rounded-sm overflow-hidden"
+              className="relative rounded-lg overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.024)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                border: "1px solid rgba(0,200,83,0.11)",
-                boxShadow:
-                  "0 0 0 1px rgba(0,200,83,0.04), 0 24px 64px rgba(0,0,0,0.45)",
+                background: "#ffffff",
+                border: "1px solid rgba(11,15,11,0.10)",
+                boxShadow: "0 18px 50px rgba(11,15,11,0.08)",
               }}
             >
               {/* Top accent bar */}
               <div
                 aria-hidden
-                className="absolute top-0 left-0 right-0 h-[1.5px]"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent 0%, #00c853 30%, #69f0ae 70%, transparent 100%)",
-                  opacity: 0.55,
-                }}
+                className="absolute top-0 left-0 right-0 h-[2px]"
+                style={{ background: "#00c853" }}
               />
 
               <AnimatePresence mode="wait">
@@ -385,7 +368,7 @@ export default function ContactForm() {
 
                     {/* Radio group 1 — client type */}
                     <div className="space-y-2">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8a9e8a]">
+                      <p className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-muted">
                         ¿Sos cliente?
                       </p>
                       <PillGroup<ClientType>
@@ -400,7 +383,7 @@ export default function ContactForm() {
 
                     {/* Radio group 2 — profile type */}
                     <div className="space-y-2">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8a9e8a]">
+                      <p className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-muted">
                         Perfil
                       </p>
                       <PillGroup<ProfileType>
@@ -417,7 +400,7 @@ export default function ContactForm() {
                     {/* Divider */}
                     <div
                       className="h-px"
-                      style={{ background: "rgba(0,200,83,0.08)" }}
+                      style={{ background: "rgba(11,15,11,0.10)" }}
                     />
 
                     {/* Nombre */}
@@ -471,6 +454,11 @@ export default function ContactForm() {
                       />
                     </Field>
 
+                    {/* Submit error */}
+                    {submitError && (
+                      <p className="text-sm text-[#f44336] -mt-2">{submitError}</p>
+                    )}
+
                     {/* Submit */}
                     <motion.button
                       type="submit"
@@ -479,20 +467,17 @@ export default function ContactForm() {
                       whileTap={loading ? {} : { scale: 0.98 }}
                       transition={{ duration: 0.18 }}
                       className="relative w-full flex items-center justify-center gap-2.5
-                                 py-3.5 rounded-sm text-sm font-bold tracking-wide
+                                 py-3.5 rounded-lg text-base font-bold tracking-wide
                                  text-[#0a0f0a] overflow-hidden
                                  disabled:opacity-55 disabled:cursor-not-allowed"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)",
-                      }}
+                      style={{ background: "#00c853" }}
                     >
                       {/* Hover sheen */}
                       <motion.span
                         className="absolute inset-0"
                         initial={{ opacity: 0 }}
                         whileHover={{ opacity: 1 }}
-                        style={{ background: "rgba(255,255,255,0.10)" }}
+                        style={{ background: "rgba(255,255,255,0.14)" }}
                       />
 
                       {loading ? (

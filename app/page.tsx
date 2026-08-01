@@ -9,7 +9,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 export default function Home() {
   return (
-    <main className="bg-[#0a0f0a]">
+    <main className="bg-[#0b0f0b]">
       <Hero />
       <Section1 />
       <Section2 />

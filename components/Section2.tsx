@@ -12,28 +12,29 @@ const CARDS = [
     label: "01",
     title: "Research Propio y\nVisión Global",
     body: "Contamos con un equipo de research propio, con visión global y experiencia en mercados internacionales, lo que nos permite anticipar tendencias y oportunidades para nuestros clientes.",
-    // accent tones per card for the icon halo
-    haloFrom: "rgba(0,200,83,0.18)",
-    haloTo:   "rgba(0,200,83,0.04)",
-    iconColor: "#00c853",
+    // Tones are tuned for this section's white background — a green-to-ink
+    // scale, so each icon stays legible without competing hues.
+    haloFrom: "rgba(0,200,83,0.20)",
+    haloTo:   "rgba(0,200,83,0.05)",
+    iconColor: "#00893a",
   },
   {
     icon: ShieldCheck,
     label: "02",
     title: "Gestión de Riesgos\nAvanzada",
     body: "Implementamos modelos cuantitativos y cualitativos de gestión de riesgos, adaptados a cada cliente, para proteger y potenciar su patrimonio en todo momento.",
-    haloFrom: "rgba(105,240,174,0.16)",
-    haloTo:   "rgba(105,240,174,0.03)",
-    iconColor: "#69f0ae",
+    haloFrom: "rgba(0,200,83,0.16)",
+    haloTo:   "rgba(0,200,83,0.03)",
+    iconColor: "#00c853",
   },
   {
     icon: CandlestickChart,
     label: "03",
     title: "Ejecución Precisa en\nSales & Trading",
     body: "Ofrecemos acceso directo a mercados globales y ejecución precisa en operaciones de Sales & Trading, asegurando eficiencia y transparencia en cada transacción.",
-    haloFrom: "rgba(212,175,55,0.16)",
-    haloTo:   "rgba(212,175,55,0.03)",
-    iconColor: "#d4af37",
+    haloFrom: "rgba(11,15,11,0.10)",
+    haloTo:   "rgba(11,15,11,0.02)",
+    iconColor: "#0b0f0b",
   },
 ] as const;
 
@@ -79,7 +80,7 @@ function DiagonalGrid() {
       aria-hidden
       className="absolute inset-0 pointer-events-none overflow-hidden"
       style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 48 L48 0' stroke='rgba(0%2C200%2C83%2C0.055)' stroke-width='0.75' fill='none'/%3E%3C/svg%3E")`,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 48 L48 0' stroke='rgba(0%2C200%2C83%2C0.10)' stroke-width='0.75' fill='none'/%3E%3C/svg%3E")`,
         backgroundSize: "48px 48px",
         maskImage:
           "radial-gradient(ellipse 90% 90% at 50% 50%, black 0%, transparent 100%)",
@@ -103,10 +104,10 @@ function FeatureCard({ card }: { card: CardData }) {
       whileHover="hovered"
       initial="rest"
       animate="rest"
-      className="relative flex flex-col rounded-sm overflow-hidden cursor-default"
+      className="relative flex flex-col rounded-lg overflow-hidden cursor-default"
       style={{
-        background: "rgba(255,255,255,0.025)",
-        border: "1px solid rgba(0,200,83,0.11)",
+        background: "#ffffff",
+        border: "1px solid rgba(11,15,11,0.10)",
       }}
     >
       {/* Hover glow border — rendered as an absolutely-positioned overlay
@@ -117,9 +118,9 @@ function FeatureCard({ card }: { card: CardData }) {
           hovered: { opacity: 1 },
         }}
         transition={{ duration: 0.25 }}
-        className="absolute inset-0 rounded-sm pointer-events-none"
+        className="absolute inset-0 rounded-lg pointer-events-none"
         style={{
-          boxShadow: `0 0 0 1px rgba(0,200,83,0.32), 0 16px 56px rgba(0,200,83,0.10)`,
+          boxShadow: `0 0 0 1px rgba(0,200,83,0.42), 0 16px 44px rgba(11,15,11,0.10)`,
         }}
       />
 
@@ -134,8 +135,8 @@ function FeatureCard({ card }: { card: CardData }) {
       >
         {/* Card number */}
         <span
-          className="self-end text-[11px] font-mono font-bold tracking-[0.15em]"
-          style={{ color: "rgba(0,200,83,0.25)" }}
+          className="self-end text-sm font-mono font-bold tracking-[0.15em]"
+          style={{ color: "rgba(11,15,11,0.28)" }}
         >
           {card.label}
         </span>
@@ -165,13 +166,13 @@ function FeatureCard({ card }: { card: CardData }) {
 
         {/* Title — newlines respected via whitespace-pre-line */}
         <h3
-          className="text-[1.05rem] font-bold leading-snug tracking-[-0.01em] mb-4 text-[#f0f0f0] whitespace-pre-line"
+          className="text-[1.05rem] font-bold leading-snug tracking-[-0.01em] mb-4 text-ink whitespace-pre-line"
         >
           {card.title}
         </h3>
 
         {/* Body */}
-        <p className="text-sm text-[#8a9e8a] leading-[1.75] flex-1">
+        <p className="text-base text-ink-muted leading-[1.75] flex-1">
           {card.body}
         </p>
 
@@ -205,29 +206,10 @@ export default function Section2() {
       id="servicios"
       ref={ref}
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: "#060b06" }}
+      style={{ background: "#ffffff" }}
     >
       {/* Diagonal grid overlay */}
       <DiagonalGrid />
-
-      {/* Ambient glow — top-right */}
-      <div
-        aria-hidden
-        className="absolute top-0 right-0 w-[520px] h-[420px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 100% 0%, rgba(0,200,83,0.07) 0%, transparent 65%)",
-        }}
-      />
-      {/* Ambient glow — bottom-left */}
-      <div
-        aria-hidden
-        className="absolute bottom-0 left-0 w-[400px] h-[300px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 0% 100%, rgba(0,200,83,0.05) 0%, transparent 60%)",
-        }}
-      />
 
       {/* Top / bottom dividers */}
       {[0, 1].map((pos) => (
@@ -235,14 +217,11 @@ export default function Section2() {
           key={pos}
           aria-hidden
           className={`absolute ${pos === 0 ? "top-0" : "bottom-0"} left-0 right-0 h-px`}
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(0,200,83,0.13) 40%, rgba(0,200,83,0.13) 60%, transparent)",
-          }}
+          style={{ background: "rgba(11,15,11,0.10)" }}
         />
       ))}
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6">
 
         {/* ── Section header ── */}
         <motion.div
@@ -256,8 +235,8 @@ export default function Section2() {
           <div>
             <motion.span
               variants={headerVariant}
-              className="inline-flex items-center gap-2 text-[10px] font-bold
-                         uppercase tracking-[0.2em] text-accent mb-5 block"
+              className="inline-flex items-center gap-2 text-sm font-bold
+                         uppercase tracking-[0.2em] text-accent-ink mb-5 block"
             >
               <span className="block w-6 h-px bg-accent" />
               Somos diferentes
@@ -266,18 +245,10 @@ export default function Section2() {
             <motion.h2
               variants={headerVariant}
               className="text-[clamp(2rem,4.5vw,3.5rem)] font-black leading-[1.06]
-                         tracking-[-0.025em] text-[#f0f0f0]"
+                         tracking-[-0.025em] text-ink"
             >
               Lo que nos hace{" "}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(100deg, #00c853 0%, #69f0ae 55%, #f0f0f0 100%)",
-                }}
-              >
-                distintos
-              </span>
+              <span style={{ color: "#00893a" }}>distintos</span>
             </motion.h2>
           </div>
 
@@ -285,8 +256,8 @@ export default function Section2() {
           <motion.div variants={headerVariant} className="flex-shrink-0">
             <a
               href="#contacto"
-              className="group inline-flex items-center gap-2 text-sm font-semibold
-                         text-accent hover:text-[#69f0ae] transition-colors duration-200"
+              className="group inline-flex items-center gap-2 text-base font-semibold
+                         text-accent-ink hover:text-[#00c853] transition-colors duration-200"
             >
               Ver Nuestros Servicios
               <ArrowRight

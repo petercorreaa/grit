@@ -24,7 +24,7 @@ function PageHero() {
       <div
         aria-hidden
         className="absolute inset-0"
-        style={{ background: "radial-gradient(ellipse at bottom, #0a1f0a 0%, #050a05 100%)" }}
+        style={{ background: "#0b0f0b" }}
       />
 
       {/* Mesh overlay */}
@@ -55,12 +55,12 @@ function PageHero() {
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease }}
-        className="relative z-10 text-center px-5 sm:px-8 max-w-3xl mx-auto pt-28 pb-16"
+        className="relative z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto pt-28 pb-16"
       >
         {/* Eyebrow */}
         <div className="mb-6 flex items-center justify-center gap-2.5">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse flex-shrink-0" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent">
+          <span className="text-sm font-bold uppercase tracking-[0.22em] text-accent">
             GRIT
           </span>
         </div>
@@ -71,11 +71,7 @@ function PageHero() {
                      tracking-[-0.025em] mb-5"
         >
           <span
-            className="bg-clip-text text-transparent"
-            style={{
-              backgroundImage:
-                "linear-gradient(100deg, #00c853 0%, #69f0ae 45%, #f0f0f0 80%)",
-            }}
+            className="text-accent"
           >
             Nuestros Servicios
           </span>
@@ -158,20 +154,20 @@ function ServiceCard({
       whileHover="hovered"
       initial="rest"
       animate="rest"
-      className={`relative flex flex-col rounded-sm overflow-hidden cursor-default ${className}`}
+      className={`relative flex flex-col rounded-lg overflow-hidden cursor-default ${className}`}
       style={{
-        background: "rgba(255,255,255,0.025)",
-        border: "1px solid rgba(0,200,83,0.11)",
+        background: "#ffffff",
+        border: "1px solid rgba(11,15,11,0.10)",
       }}
     >
       {/* Hover glow border */}
       <motion.div
         variants={{ rest: { opacity: 0 }, hovered: { opacity: 1 } }}
         transition={{ duration: 0.25 }}
-        className="absolute inset-0 rounded-sm pointer-events-none"
+        className="absolute inset-0 rounded-lg pointer-events-none"
         style={{
           boxShadow:
-            "0 0 0 1px rgba(0,200,83,0.32), 0 16px 56px rgba(0,200,83,0.10)",
+            "0 0 0 1px rgba(0,200,83,0.42), 0 16px 44px rgba(11,15,11,0.10)",
         }}
       />
 
@@ -184,24 +180,23 @@ function ServiceCard({
         {/* Icon */}
         <div className="mb-5">
           <div
-            className="w-12 h-12 rounded-lg flex items-center justify-center"
+            className="w-12 h-12 rounded-full flex items-center justify-center"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(0,200,83,0.20) 0%, rgba(0,200,83,0.06) 100%)",
-              border: "1px solid rgba(0,200,83,0.22)",
+              background: "rgba(0,200,83,0.12)",
+              border: "1px solid rgba(0,200,83,0.30)",
             }}
           >
-            <Icon size={20} className="text-accent" strokeWidth={1.7} />
+            <Icon size={20} className="text-accent-ink" strokeWidth={1.7} />
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-[1rem] font-bold leading-snug tracking-[-0.01em] mb-3 text-[#f0f0f0]">
+        <h3 className="text-[1rem] font-bold leading-snug tracking-[-0.01em] mb-3 text-ink">
           {service.title}
         </h3>
 
         {/* Body */}
-        <p className="text-sm text-[#8a9e8a] leading-[1.75] flex-1">{service.body}</p>
+        <p className="text-base text-ink-muted leading-[1.75] flex-1">{service.body}</p>
 
         {/* Bottom accent on hover */}
         <motion.div
@@ -211,9 +206,7 @@ function ServiceCard({
           }}
           transition={{ duration: 0.4, ease: "easeOut" as const }}
           className="mt-5 h-px origin-left"
-          style={{
-            background: "linear-gradient(90deg, #00c853, #69f0ae, transparent)",
-          }}
+          style={{ background: "#00c853" }}
         />
       </motion.div>
     </motion.article>
@@ -227,7 +220,7 @@ function ServicesGrid() {
   return (
     <section
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: "#060b06" }}
+      style={{ background: "#ffffff" }}
     >
       {/* Dividers */}
       {["top-0", "bottom-0"].map((pos) => (
@@ -235,14 +228,11 @@ function ServicesGrid() {
           key={pos}
           aria-hidden
           className={`absolute ${pos} left-0 right-0 h-px`}
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(0,200,83,0.13) 40%, rgba(0,200,83,0.13) 60%, transparent)",
-          }}
+          style={{ background: "rgba(11,15,11,0.10)" }}
         />
       ))}
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <motion.div
@@ -253,26 +243,17 @@ function ServicesGrid() {
           className="mb-12 md:mb-16"
         >
           <span
-            className="inline-flex items-center gap-2 text-[10px] font-bold
-                       uppercase tracking-[0.2em] text-accent mb-5 block"
+            className="inline-flex items-center gap-2 text-sm font-bold
+                       uppercase tracking-[0.2em] text-accent-ink mb-5 block"
           >
             <span className="block w-6 h-px bg-accent" />
             Servicios
           </span>
           <h2
             className="text-[clamp(1.8rem,4vw,3rem)] font-black leading-[1.06]
-                       tracking-[-0.025em] text-[#f0f0f0]"
+                       tracking-[-0.025em] text-ink"
           >
-            Lo que{" "}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(100deg, #00c853 0%, #69f0ae 55%, #f0f0f0 100%)",
-              }}
-            >
-              ofrecemos
-            </span>
+            Lo que <span style={{ color: "#00893a" }}>ofrecemos</span>
           </h2>
         </motion.div>
 
@@ -302,9 +283,9 @@ function ServicesGrid() {
           <a
             href="#contactanos-section"
             className="group relative inline-flex items-center gap-2.5 px-8 py-3.5
-                       text-[#0a0f0a] text-sm font-bold tracking-wide rounded-sm overflow-hidden"
+                       text-[#0a0f0a] text-base font-bold tracking-wide rounded-lg overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)",
+              background: "#00c853",
             }}
           >
             <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -331,7 +312,7 @@ function FondosBanner() {
     <section
       ref={ref}
       className="relative py-24 md:py-28 overflow-hidden"
-      style={{ background: "#080d08" }}
+      style={{ background: "#0b0f0b" }}
     >
       {/* Dividers */}
       {["top-0", "bottom-0"].map((pos) => (
@@ -369,12 +350,12 @@ function FondosBanner() {
         initial={{ opacity: 0, y: 32 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7, ease }}
-        className="relative z-10 text-center max-w-4xl mx-auto px-5 sm:px-8"
+        className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6"
       >
         {/* Eyebrow */}
         <div className="mb-6 flex items-center justify-center gap-3">
           <span className="block w-8 h-px bg-accent opacity-60" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent">
+          <span className="text-sm font-bold uppercase tracking-[0.22em] text-accent">
             ACDI
           </span>
           <span className="block w-8 h-px bg-accent opacity-60" />
@@ -386,11 +367,7 @@ function FondosBanner() {
                      tracking-[-0.025em] mb-6"
         >
           <span
-            className="bg-clip-text text-transparent"
-            style={{
-              backgroundImage:
-                "linear-gradient(100deg, #00c853 0%, #69f0ae 50%, #f0f0f0 85%)",
-            }}
+            className="text-accent"
           >
             Conocé nuestros Fondos
           </span>
@@ -406,7 +383,7 @@ function FondosBanner() {
         <Link
           href="/fondos"
           className="group inline-flex items-center gap-2.5 px-8 py-3.5
-                     text-sm font-bold tracking-wide rounded-sm
+                     text-base font-bold tracking-wide rounded-lg
                      border border-[rgba(0,200,83,0.35)] text-accent
                      hover:bg-[rgba(0,200,83,0.10)] hover:border-[rgba(0,200,83,0.6)]
                      transition-all duration-200"
@@ -455,7 +432,7 @@ function ValorCard({ valor, index }: { valor: ValorData; index: number }) {
       initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.65, delay: index * 0.13, ease }}
-      className="relative flex flex-col rounded-sm p-7 cursor-default
+      className="relative flex flex-col rounded-lg p-7 cursor-default
                  transition-[border-color] duration-300
                  hover:border-[rgba(0,200,83,0.28)]"
       style={{
@@ -483,14 +460,14 @@ function ValorCard({ valor, index }: { valor: ValorData; index: number }) {
       </h3>
 
       {/* Body */}
-      <p className="text-sm text-[#8a9e8a] leading-[1.78] flex-1">{valor.body}</p>
+      <p className="text-base text-[#8a9e8a] leading-[1.78] flex-1">{valor.body}</p>
 
       {/* Bottom accent */}
       <div className="mt-5 w-full h-px overflow-hidden">
         <motion.div
           className="h-full w-full origin-left"
           style={{
-            background: "linear-gradient(90deg, #00c853, #69f0ae, transparent)",
+            background: "linear-gradient(90deg, #00c853, transparent)",
           }}
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
@@ -505,7 +482,7 @@ function ValoresSection() {
   return (
     <section
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: "#0c1410" }}
+      style={{ background: "#0b0f0b" }}
     >
       {/* Dot grid */}
       <div
@@ -536,7 +513,7 @@ function ValoresSection() {
         />
       ))}
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <motion.div
@@ -547,7 +524,7 @@ function ValoresSection() {
           className="mb-12 md:mb-16"
         >
           <span
-            className="inline-flex items-center gap-2 text-[10px] font-bold
+            className="inline-flex items-center gap-2 text-sm font-bold
                        uppercase tracking-[0.2em] text-accent mb-5 block"
           >
             <span className="block w-6 h-px bg-accent" />
@@ -559,11 +536,7 @@ function ValoresSection() {
           >
             Nuestro{" "}
             <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(100deg, #00c853 0%, #69f0ae 55%, #f0f0f0 100%)",
-              }}
+              className="text-accent"
             >
               Compromiso
             </span>
@@ -590,7 +563,7 @@ function ValoresSection() {
 
 export default function ServiciosPage() {
   return (
-    <main className="bg-[#050a05]">
+    <main className="bg-[#0b0f0b]">
       <PageHero />
       <ServicesGrid />
       <FondosBanner />

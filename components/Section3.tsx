@@ -71,7 +71,7 @@ function TimelineLine() {
           className="w-full h-full"
           style={{
             background:
-              "linear-gradient(90deg, #00c853 0%, #69f0ae 55%, rgba(105,240,174,0.3) 100%)",
+              "#00c853",
           }}
         />
       </motion.div>
@@ -133,7 +133,7 @@ function TimelineItem({
 
       {/* Card body */}
       <div
-        className="relative z-10 rounded-sm p-7 w-full flex flex-col items-center gap-5
+        className="relative z-10 rounded-lg p-7 w-full flex-1 flex flex-col items-center gap-5
                    transition-[border-color,box-shadow] duration-300
                    group-hover:border-[rgba(0,200,83,0.28)]"
         style={{
@@ -171,7 +171,7 @@ function TimelineItem({
 
         {/* Number badge — mobile only */}
         <span
-          className="md:hidden text-[10px] font-mono font-bold tracking-[0.2em]"
+          className="md:hidden text-sm font-mono font-bold tracking-[0.2em]"
           style={{ color: "rgba(0,200,83,0.35)" }}
         >
           {item.num}
@@ -183,7 +183,7 @@ function TimelineItem({
         </h3>
 
         {/* Body */}
-        <p className="text-sm text-[#8a9e8a] leading-[1.78] max-w-[300px]">
+        <p className="text-base text-[#8a9e8a] leading-[1.78] max-w-[300px] flex-1">
           {item.body}
         </p>
 
@@ -192,7 +192,7 @@ function TimelineItem({
           <motion.div
             className="h-full w-full origin-left"
             style={{
-              background: "linear-gradient(90deg, #00c853, #69f0ae, transparent)",
+              background: "linear-gradient(90deg, #00c853, transparent)",
             }}
             initial={{ scaleX: 0 }}
             animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
@@ -214,7 +214,7 @@ export default function Section3() {
     <section
       id="por-que"
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: "#0c1410" }}
+      style={{ background: "#0b0f0b" }}
     >
       {/* Subtle square dot grid — lighter bg so use lower opacity */}
       <div
@@ -245,7 +245,7 @@ export default function Section3() {
         />
       ))}
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6">
 
         {/* ── Header ── */}
         <motion.div
@@ -258,7 +258,7 @@ export default function Section3() {
           <div>
             <motion.span
               variants={fadeIn}
-              className="inline-flex items-center gap-2 text-[10px] font-bold
+              className="inline-flex items-center gap-2 text-sm font-bold
                          uppercase tracking-[0.2em] text-accent mb-5 block"
             >
               <span className="block w-6 h-px bg-accent" />
@@ -271,22 +271,14 @@ export default function Section3() {
                          tracking-[-0.025em] text-[#f0f0f0]"
             >
               ¿Por qué{" "}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(100deg, #00c853 0%, #69f0ae 55%, #f0f0f0 100%)",
-                }}
-              >
-                elegirnos?
-              </span>
+              <span className="text-accent">elegirnos?</span>
             </motion.h2>
           </div>
 
           <motion.div variants={fadeIn} className="flex-shrink-0">
             <a
               href="#equipo"
-              className="group inline-flex items-center gap-2 text-sm font-semibold
+              className="group inline-flex items-center gap-2 text-base font-semibold
                          text-accent hover:text-[#69f0ae] transition-colors duration-200"
             >
               Conoce al Equipo

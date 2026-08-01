@@ -1,27 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Play, ArrowRight, TrendingUp, ShieldCheck, Zap } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { Play, ArrowRight, TrendingUp, ShieldCheck, Zap, X } from "lucide-react";
+import { GradientWave } from "@/components/ui/gradient-wave";
 
-// ─── Ticker data ─────────────────────────────────────────────────────────────
-
-const TICKER_ITEMS = [
-  { symbol: "SPY",     change: "+1.2%", up: true  },
-  { symbol: "BTC/USD", change: "+3.4%", up: true  },
-  { symbol: "MERVAL",  change: "+0.8%", up: true  },
-  { symbol: "GD30",    change: "+2.1%", up: true  },
-  { symbol: "AAPL",    change: "-0.3%", up: false },
-  { symbol: "TSLA",    change: "+1.8%", up: true  },
-  { symbol: "GOLD",    change: "+0.5%", up: true  },
-  { symbol: "AL30",    change: "+1.4%", up: true  },
-  { symbol: "YPF",     change: "+2.9%", up: true  },
-  { symbol: "EUR/USD", change: "-0.1%", up: false },
-  { symbol: "S&P 500", change: "+0.9%", up: true  },
-  { symbol: "NASDAQ",  change: "+1.3%", up: true  },
-  { symbol: "GGAL",    change: "+3.1%", up: true  },
-  { symbol: "BMA",     change: "+1.6%", up: true  },
-];
+// ─── Gradient background config ───────────────────────────────────────────────
+// Declared at module scope on purpose: GradientWave lists `colors`,
+// `noiseFrequency` and `deform` in its effect's dependency array, so inline
+// literals would be a new reference on every render and tear down / rebuild the
+// WebGL context each time (this component re-renders whenever the demo modal
+// opens).
+const HERO_NOISE_FREQUENCY: [number, number] = [0.00012, 0.00055];
+const HERO_DEFORM = { incline: 0.4, noiseAmp: 300, noiseFlow: 4.5 };
 
 // ─── Animation variants ───────────────────────────────────────────────────────
 
@@ -49,115 +40,86 @@ const fadeIn: Variants = {
   },
 };
 
-// ─── Dot-matrix canvas background ────────────────────────────────────────────
+// ─── Demo video modal ──────────────────────────────────────────────────────────
 
-function DotMatrix() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const shouldReduce = useReducedMotion();
+function VideoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (shouldReduce) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animId: number;
-    let t = 0;
-    const SPACING = 38;
-
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = canvas.offsetWidth * dpr;
-      canvas.height = canvas.offsetHeight * dpr;
-      ctx.scale(dpr, dpr);
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
     };
-    resize();
-    window.addEventListener("resize", resize, { passive: true });
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      t += 0.007;
-      const cols = Math.ceil(canvas.offsetWidth / SPACING) + 1;
-      const rows = Math.ceil(canvas.offsetHeight / SPACING) + 1;
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const wave = Math.sin(t + c * 0.45 + r * 0.32) * 0.5 + 0.5;
-          const isGold = (c * 7 + r * 13) % 31 === 0;
-          const opacity = wave * 0.10 + 0.02;
-          const radius  = wave * 0.9 + 0.4;
-          ctx.beginPath();
-          ctx.arc(c * SPACING, r * SPACING, radius, 0, Math.PI * 2);
-          ctx.fillStyle = isGold
-            ? `rgba(212,175,55,${opacity * 0.6})`
-            : `rgba(0,200,83,${opacity})`;
-          ctx.fill();
-        }
-      }
-      animId = requestAnimationFrame(draw);
-    };
-    draw();
-
+    document.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
     };
-  }, [shouldReduce]);
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) return;
+    const video = videoRef.current;
+    if (!video) return;
+    // Play explicitly (rather than relying on the `autoplay` attribute) so the
+    // browser still associates playback with the click that opened the modal
+    // and allows audio instead of silently muting it.
+    video.muted = false;
+    video.play().catch(() => {
+      // Autoplay-with-sound was blocked; the user can press play manually.
+    });
+  }, [open]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      aria-hidden
-    />
-  );
-}
-
-// ─── Ticker strip ─────────────────────────────────────────────────────────────
-
-function Ticker() {
-  const items = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
-
-  return (
-    <motion.div
-      variants={fadeIn}
-      className="absolute bottom-0 left-0 right-0 overflow-hidden
-                 border-t border-[rgba(0,200,83,0.12)]
-                 bg-[rgba(8,12,8,0.75)] backdrop-blur-sm"
-    >
-      <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center
-                      px-4 bg-[rgba(0,200,83,0.08)] border-r border-[rgba(0,200,83,0.14)]">
-        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase
-                         tracking-[0.14em] text-accent whitespace-nowrap">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          Live
-        </span>
-      </div>
-
-      <div className="pl-20 overflow-hidden">
+    <AnimatePresence>
+      {open && (
         <motion.div
-          animate={{ x: ["0%", "-33.333%"] }}
-          transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
-          className="flex items-center gap-0 whitespace-nowrap py-2.5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-5"
+          style={{ background: "rgba(2,6,2,0.88)", backdropFilter: "blur(6px)" }}
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Video de presentación de GRIT Capital Group"
         >
-          {items.map((item, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-2 px-5 font-mono text-[11px]
-                         border-r border-[rgba(0,200,83,0.07)] last:border-0"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden"
+            style={{
+              border: "1px solid rgba(0,200,83,0.22)",
+              boxShadow: "0 24px 80px rgba(0,0,0,0.6)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              ref={videoRef}
+              src="/assets/grit-equipo.mp4"
+              controls
+              playsInline
+              className="w-full h-full object-contain bg-black"
+            />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar video"
+              className="absolute top-3 right-3 flex items-center justify-center w-9 h-9 rounded-full
+                         bg-[rgba(8,12,8,0.75)] border border-[rgba(0,200,83,0.28)]
+                         text-[#f0f0f0] hover:bg-[rgba(0,200,83,0.18)] transition-colors duration-200"
             >
-              <span className="text-[#8a9e8a] tracking-wide">{item.symbol}</span>
-              <span className={`font-semibold ${item.up ? "text-[#00c853]" : "text-[#f44336]"}`}>
-                {item.up ? "▲" : "▼"} {item.change}
-              </span>
-            </span>
-          ))}
+              <X size={16} />
+            </button>
+          </motion.div>
         </motion.div>
-      </div>
-
-      <div className="absolute right-0 top-0 bottom-0 w-16 pointer-events-none
-                      bg-gradient-to-l from-[rgba(8,12,8,0.9)] to-transparent" />
-    </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -172,88 +134,85 @@ const TRUST = [
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 export default function Hero() {
+  const [showDemo, setShowDemo] = useState(false);
+  const [gradientColors, setGradientColors] = useState<string[] | null>(null);
+
+  // Resolve the gradient palette from the brand CSS custom properties, so the
+  // colours stay driven by the design tokens in globals.css. The WebGL layer
+  // parses raw hex (`parseInt(hex, 16)`), so it cannot consume `var(--token)`
+  // directly — the values have to be read once on the client.
+  useEffect(() => {
+    const styles = getComputedStyle(document.documentElement);
+    const token = (name: string) => styles.getPropertyValue(name).trim();
+    setGradientColors([
+      token("--black"),        // base
+      token("--mid-green"),    // wave 1
+      token("--brand-green"),  // wave 2
+      token("--mid-green"),    // wave 3
+    ]);
+  }, []);
+
   return (
-    <section id="inicio" className="relative min-h-screen flex flex-col overflow-hidden">
+    <section id="inicio" className="relative">
 
-      {/* ── Background gradient ── */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background: "radial-gradient(ellipse at bottom, #0a1f0a 0%, #050a05 100%)",
-        }}
-      />
-
-      {/* ── Mesh overlay ── */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(ellipse 100% 80% at 10% 20%, rgba(0,200,83,0.10) 0%, transparent 55%),
-            radial-gradient(ellipse 70%  60% at 90% 80%, rgba(26,71,42,0.22)  0%, transparent 50%),
-            radial-gradient(ellipse 50%  40% at 55% 45%, rgba(0,200,83,0.05)  0%, transparent 60%),
-            radial-gradient(ellipse 30%  25% at 75% 15%, rgba(212,175,55,0.04) 0%, transparent 55%)
-          `,
-        }}
-      />
-
-      {/* ── Dot matrix ── */}
-      <DotMatrix />
-
-      {/* ── Edge vignette ── */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%)",
-        }}
-      />
-
-      {/* ── Decorative vertical rules ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-        <div className="absolute right-[15%] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[rgba(0,200,83,0.07)] to-transparent" />
-        <div className="absolute right-[35%] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[rgba(0,200,83,0.04)] to-transparent" />
-        <div className="absolute top-[30%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(0,200,83,0.06)] to-transparent" />
-      </div>
-
-      {/* ── Main content ── */}
-      <div className="relative flex-1 flex items-center pb-14">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="max-w-4xl mx-auto w-full px-5 sm:px-8 pt-32 pb-10 flex flex-col items-center text-center"
+      {/* Inset frame — the block sits below the fixed navbar and keeps a
+          visible margin against the viewport edges, Lemon-style. */}
+      <div className="px-3 sm:px-5 pt-[105px] pb-4 sm:pb-5">
+        <div
+          className="relative isolate flex flex-col overflow-hidden
+                     rounded-[1.75rem] sm:rounded-[2.5rem]
+                     min-h-[calc(100vh-125px)] bg-[#0b0f0b]"
         >
+
+          {/* ── Animated gradient background (z-0) ── */}
+          {gradientColors && (
+            <GradientWave
+              colors={gradientColors}
+              noiseFrequency={HERO_NOISE_FREQUENCY}
+              deform={HERO_DEFORM}
+            />
+          )}
+
+          {/* ── Scrim ── keeps the white and green copy legible over the
+              moving gradient without hiding it. */}
+          <div
+            aria-hidden
+            className="absolute inset-0 z-[1] pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 90% 80% at 50% 45%, rgba(6,8,6,0.30) 0%, rgba(6,8,6,0.78) 100%)",
+            }}
+          />
+
+          {/* ── Main content ── */}
+          <div className="relative z-10 flex-1 flex items-center pb-14">
+            <motion.div
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-16 pb-10 flex flex-col items-center text-center"
+            >
 
           {/* Headline */}
           <motion.h1
             variants={fadeUp}
-            className="text-[clamp(2.6rem,6.5vw,5.25rem)] font-black leading-[1.04]
+            className="text-[clamp(1.4rem,5.5vw,4.5rem)] font-black leading-[1.04]
                        tracking-[-0.025em] mb-7"
           >
             <span className="block text-[#f0f0f0]">
-              Transformamos
-            </span>
-            <span
-              className="block bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(100deg, #00c853 0%, #69f0ae 40%, #f0f0f0 75%)",
-              }}
-            >
-              Información en
+              Transformamos <span className="text-accent">Información</span>
             </span>
             <span className="block text-[#f0f0f0]">
-              Decisiones Estratégicas
+              en Decisiones Estratégicas
             </span>
           </motion.h1>
 
-          {/* Subtext */}
+          {/* Subtext — font-size is a fluid clamp tuned (via real width
+              measurement, not guessed) so the full sentence always fits one
+              line, down to a 360px viewport, without wrapping. */}
           <motion.p
             variants={fadeUp}
-            className="text-base sm:text-lg text-[#8a9e8a] leading-relaxed max-w-lg mb-10"
+            className="text-[clamp(0.68rem,3vw-0.55px,1.125rem)] text-[#8a9e8a] leading-relaxed mb-10 whitespace-nowrap"
           >
             Creado por amantes del mercado para{" "}
             <span className="text-[#c8d8c8]">potenciar tus inversiones</span>.
@@ -264,8 +223,8 @@ export default function Hero() {
             <a
               href="#equipo"
               className="group relative flex items-center gap-2.5 px-7 py-3.5
-                         text-[#0a0f0a] text-sm font-bold tracking-wide rounded-sm overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)" }}
+                         text-[#0a0f0a] text-base font-bold tracking-wide rounded-lg overflow-hidden"
+              style={{ background: "#00c853" }}
             >
               <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               <span className="relative">Conoce a nuestro equipo</span>
@@ -273,10 +232,12 @@ export default function Hero() {
             </a>
 
             <button
+              type="button"
+              onClick={() => setShowDemo(true)}
               className="group flex items-center gap-3 px-6 py-3.5
                          border border-[rgba(0,200,83,0.22)]
                          bg-[rgba(0,200,83,0.04)] backdrop-blur-sm
-                         text-[#f0f0f0] text-sm font-medium tracking-wide rounded-sm
+                         text-[#f0f0f0] text-base font-medium tracking-wide rounded-lg
                          hover:border-[rgba(0,200,83,0.5)] hover:bg-[rgba(0,200,83,0.08)]
                          transition-all duration-200"
             >
@@ -296,24 +257,22 @@ export default function Hero() {
             {TRUST.map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-2">
                 <Icon size={13} className="text-accent flex-shrink-0" />
-                <span className="text-[11px] text-[#8a9e8a] tracking-wide">{text}</span>
+                <span className="text-sm text-[#8a9e8a] tracking-wide">{text}</span>
               </div>
             ))}
           </motion.div>
 
-        </motion.div>
+            </motion.div>
+          </div>
+
+        </div>
       </div>
 
-      {/* ── Ticker strip pinned to bottom ── */}
-      <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="show"
-        transition={{ delay: 0.9 }}
-        className="relative z-10"
-      >
-        <Ticker />
-      </motion.div>
+      {/* ── Demo video modal ── */}
+      {/* Kept outside the rounded block: the block is `overflow-hidden` and
+          framer-motion applies transforms inside it, which would otherwise
+          become the containing block for the modal's `fixed` positioning. */}
+      <VideoModal open={showDemo} onClose={() => setShowDemo(false)} />
 
     </section>
   );

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone, MapPin, FileText } from "lucide-react";
+import Image from "next/image";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -45,29 +46,14 @@ const LEGAL_TEXT =
 
 function FooterLogo() {
   return (
-    <a href="#" className="inline-flex items-center gap-2.5 group mb-5 block w-fit">
-      <span className="relative flex-shrink-0">
-        <span
-          className="flex w-9 h-9 items-center justify-center rounded-sm
-                     font-black text-[#0a0f0a] text-lg leading-none"
-          style={{ background: "linear-gradient(135deg, #00c853 0%, #69f0ae 100%)" }}
-        >
-          G
-        </span>
-        <span className="absolute inset-0 rounded-sm bg-accent blur-md opacity-20
-                         group-hover:opacity-40 transition-opacity duration-300" />
-      </span>
-      <span className="font-black text-base tracking-[-0.02em] text-[#f0f0f0] leading-tight">
-        GRIT{" "}
-        <span
-          className="font-light bg-clip-text text-transparent"
-          style={{
-            backgroundImage: "linear-gradient(90deg, #00c853, #69f0ae)",
-          }}
-        >
-          Capital Group
-        </span>
-      </span>
+    <a href="#" className="inline-flex items-center group mb-5 block w-fit">
+      <Image
+        src="/images/logo-blanco.png"
+        alt="GRIT Capital Group"
+        width={130}
+        height={60}
+        className="h-9 w-auto"
+      />
     </a>
   );
 }
@@ -77,8 +63,8 @@ function FooterLogo() {
 function RegBadge({ label }: { label: string }) {
   return (
     <span
-      className="inline-flex items-center px-2.5 py-1 text-[10px] font-bold
-                 uppercase tracking-[0.12em] rounded-sm transition-colors duration-200
+      className="inline-flex items-center px-2.5 py-1 text-sm font-bold
+                 uppercase tracking-[0.12em] rounded-lg transition-colors duration-200
                  cursor-default"
       style={{
         background: "rgba(0,200,83,0.06)",
@@ -97,7 +83,7 @@ export default function Footer() {
   return (
     <footer
       className="relative overflow-hidden"
-      style={{ background: "#050805" }}
+      style={{ background: "#060806" }}
     >
       {/* Top gradient border */}
       <div
@@ -121,7 +107,7 @@ export default function Footer() {
       />
 
       {/* ── Main content ── */}
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-14 pb-10">
+      <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 pt-14 pb-10">
 
         {/* ── Three-column top grid ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 mb-12">
@@ -130,7 +116,7 @@ export default function Footer() {
           <div>
             <FooterLogo />
 
-            <p className="text-[11px] font-semibold text-[#8a9e8a] mb-4 tracking-wide">
+            <p className="text-sm font-semibold text-[#8a9e8a] mb-4 tracking-wide">
               Truegrit Capital S.A.
             </p>
 
@@ -141,7 +127,7 @@ export default function Footer() {
                     size={12}
                     className="text-accent flex-shrink-0 mt-[3px] opacity-70"
                   />
-                  <span className="text-[11px] text-[#6a846a] leading-snug">
+                  <span className="text-sm text-[#6a846a] leading-snug">
                     {text}
                   </span>
                 </li>
@@ -152,7 +138,7 @@ export default function Footer() {
           {/* Col 2 — sitemap */}
           <div>
             <h4
-              className="text-[10px] font-bold uppercase tracking-[0.18em]
+              className="text-sm font-bold uppercase tracking-[0.18em]
                          text-[#f0f0f0] mb-5"
             >
               Sitemap
@@ -165,7 +151,7 @@ export default function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs
+                      className="inline-flex items-center gap-1.5 text-sm
                                  text-[#6a846a] hover:text-accent
                                  transition-colors duration-200 group"
                     >
@@ -178,7 +164,7 @@ export default function Footer() {
                   ) : (
                     <a
                       href={link.href}
-                      className="text-xs text-[#6a846a] hover:text-accent
+                      className="text-sm text-[#6a846a] hover:text-accent
                                  transition-colors duration-200"
                     >
                       {link.label}
@@ -192,7 +178,7 @@ export default function Footer() {
           {/* Col 3 — regulatory badges */}
           <div>
             <h4
-              className="text-[10px] font-bold uppercase tracking-[0.18em]
+              className="text-sm font-bold uppercase tracking-[0.18em]
                          text-[#f0f0f0] mb-5"
             >
               Regulación & Membresías
@@ -205,13 +191,13 @@ export default function Footer() {
 
             {/* CNV registration highlight */}
             <div
-              className="mt-5 px-3 py-2.5 rounded-sm"
+              className="mt-5 px-3 py-2.5 rounded-lg"
               style={{
                 background: "rgba(0,200,83,0.04)",
                 border:     "1px solid rgba(0,200,83,0.10)",
               }}
             >
-              <p className="text-[10px] text-[#8a9e8a] leading-relaxed">
+              <p className="text-sm text-[#8a9e8a] leading-relaxed">
                 <span className="text-accent font-semibold">ALyC Propio N°2230</span>
                 {" · "}
                 <span className="text-accent font-semibold">ACyDI N°202</span>
@@ -241,7 +227,7 @@ export default function Footer() {
           transition={{ duration: 0.8 }}
         >
           <p
-            className="text-[10px] leading-[1.85] mb-5 max-w-4xl"
+            className="text-sm leading-[1.85] mb-5 max-w-4xl"
             style={{ color: "rgba(138,158,138,0.55)" }}
           >
             {LEGAL_TEXT}
@@ -250,7 +236,7 @@ export default function Footer() {
           {/* Bottom row */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <span
-              className="text-[10px] font-mono"
+              className="text-sm font-mono"
               style={{ color: "rgba(138,158,138,0.4)" }}
             >
               © {new Date().getFullYear()} Truegrit Capital S.A. — GRIT Capital Group.
@@ -258,7 +244,7 @@ export default function Footer() {
             </span>
 
             <span
-              className="text-[10px] font-mono tracking-wide"
+              className="text-sm font-mono tracking-wide"
               style={{ color: "rgba(0,200,83,0.28)" }}
             >
               Buenos Aires, Argentina

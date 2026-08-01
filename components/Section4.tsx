@@ -1,29 +1,15 @@
 "use client";
 
 const LINES = [
-  {
-    pre:  "GRIT es ",
-    word: "innovación,",
-    gradient: "linear-gradient(100deg, #00c853 0%, #69f0ae 55%, #b9f6ca 100%)",
-  },
-  {
-    pre:  "",
-    word: "precisión",
-    gradient: "linear-gradient(100deg, #00e5ff 0%, #69f0ae 45%, #e0fff0 100%)",
-  },
-  {
-    pre:  "y ",
-    word: "resiliencia",
-    gradient: "linear-gradient(100deg, #d4af37 0%, #a5d631 50%, #69f0ae 100%)",
-  },
+  { pre: "GRIT es ", word: "innovación,", color: "#00c853" },
+  { pre: "",         word: "precisión",   color: "#00c853" },
+  { pre: "y ",       word: "resiliencia", color: "#00c853" },
 ] as const;
 
 const ORBS = [
-  { w: 520, h: 420, top: "8%",  left: "-8%",  color: "rgba(0,200,83,0.13)",   blur: 90 },
-  { w: 380, h: 380, top: "55%", left: "65%",  color: "rgba(0,229,255,0.08)",  blur: 80 },
-  { w: 280, h: 280, top: "30%", left: "42%",  color: "rgba(0,200,83,0.07)",   blur: 70 },
-  { w: 200, h: 200, top: "70%", left: "10%",  color: "rgba(212,175,55,0.06)", blur: 60 },
-  { w: 160, h: 160, top: "5%",  left: "75%",  color: "rgba(0,200,83,0.09)",   blur: 50 },
+  { w: 520, h: 420, top: "8%",  left: "-8%",  color: "rgba(0,200,83,0.10)", blur: 90 },
+  { w: 380, h: 380, top: "55%", left: "65%",  color: "rgba(0,200,83,0.06)", blur: 80 },
+  { w: 280, h: 280, top: "30%", left: "42%",  color: "rgba(0,200,83,0.05)", blur: 70 },
 ] as const;
 
 export default function Section4() {
@@ -32,7 +18,7 @@ export default function Section4() {
       id="innovacion"
       className="relative min-h-[88vh] flex items-center justify-center
                  overflow-hidden py-24 md:py-32"
-      style={{ background: "#060a06" }}
+      style={{ background: "#060806" }}
     >
       {/* ── Static background ── */}
 
@@ -93,12 +79,12 @@ export default function Section4() {
       ))}
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
 
         {/* Eyebrow */}
         <div className="mb-10 flex items-center justify-center gap-3">
           <span className="block w-10 h-px bg-accent opacity-60" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent">
+          <span className="text-sm font-bold uppercase tracking-[0.22em] text-accent">
             Nuestra filosofía
           </span>
           <span className="block w-10 h-px bg-accent opacity-60" />
@@ -108,7 +94,7 @@ export default function Section4() {
         <div
           className="w-24 h-px mx-auto mb-10"
           style={{
-            background: "linear-gradient(90deg, transparent, #00c853, #69f0ae, transparent)",
+            background: "linear-gradient(90deg, transparent, #00c853, transparent)",
             boxShadow:  "0 0 12px 2px rgba(0,200,83,0.4)",
           }}
         />
@@ -121,12 +107,7 @@ export default function Section4() {
           {LINES.map((line, i) => (
             <span key={i} className="block">
               {line.pre && <span className="text-[#f0f0f0]">{line.pre}</span>}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundImage: line.gradient }}
-              >
-                {line.word}
-              </span>
+              <span style={{ color: line.color }}>{line.word}</span>
             </span>
           ))}
         </h2>
@@ -137,14 +118,9 @@ export default function Section4() {
             Estamos comprometidos con la excelencia y con convertir cada
             desafío en una oportunidad de éxito.
           </p>
-          <p className="text-sm text-[#6a846a] leading-relaxed">
+          <p className="text-base text-[#6a846a] leading-relaxed">
             Entregamos{" "}
-            <span
-              className="font-semibold bg-clip-text text-transparent"
-              style={{ backgroundImage: "linear-gradient(90deg, #00c853, #69f0ae)" }}
-            >
-              resultados medibles
-            </span>
+            <span className="font-semibold text-accent">resultados medibles</span>
             .
           </p>
         </div>
@@ -159,7 +135,7 @@ export default function Section4() {
                 width:     w,
                 background:
                   i === 2
-                    ? "linear-gradient(90deg, #00c853, #69f0ae)"
+                    ? "#00c853"
                     : "rgba(0,200,83,0.2)",
                 boxShadow: i === 2 ? "0 0 8px rgba(0,200,83,0.4)" : "none",
               }}
