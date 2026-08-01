@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { Play, ArrowRight, TrendingUp, ShieldCheck, Zap, X } from "lucide-react";
+import { Play, ArrowRight, X } from "lucide-react";
 import { GradientWave } from "@/components/ui/gradient-wave";
 
 // ─── Gradient background config ───────────────────────────────────────────────
@@ -29,14 +29,6 @@ const fadeUp: Variants = {
     opacity: 1,
     y: 0,
     transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-  },
-};
-
-const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { duration: 0.7, ease: "easeOut" as const },
   },
 };
 
@@ -123,14 +115,6 @@ function VideoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-// ─── Trust bar ────────────────────────────────────────────────────────────────
-
-const TRUST = [
-  { icon: TrendingUp,  text: "Mercados locales e internacionales" },
-  { icon: ShieldCheck, text: "Regulado por CNV"                   },
-  { icon: Zap,         text: "Ejecución en tiempo real"           },
-];
-
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 export default function Hero() {
@@ -196,7 +180,7 @@ export default function Hero() {
           {/* Headline */}
           <motion.h1
             variants={fadeUp}
-            className="text-[clamp(1.4rem,5.5vw,4.5rem)] font-black leading-[1.04]
+            className="text-[clamp(1.4rem,6vw,4.5rem)] font-black leading-[1.04]
                        tracking-[-0.025em] mb-7"
           >
             <span className="block text-[#f0f0f0]">
@@ -250,16 +234,6 @@ export default function Hero() {
               </span>
               Ver demo
             </button>
-          </motion.div>
-
-          {/* Trust bar */}
-          <motion.div variants={fadeIn} className="flex flex-wrap justify-center gap-x-7 gap-y-3">
-            {TRUST.map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2">
-                <Icon size={13} className="text-accent flex-shrink-0" />
-                <span className="text-sm text-[#8a9e8a] tracking-wide">{text}</span>
-              </div>
-            ))}
           </motion.div>
 
             </motion.div>
