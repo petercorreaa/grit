@@ -1,9 +1,12 @@
 "use client";
 
-const LINES = [
-  { pre: "GRIT es ", word: "innovación,", color: "#00c853" },
-  { pre: "",         word: "precisión",   color: "#00c853" },
-  { pre: "y ",       word: "resiliencia", color: "#00c853" },
+const WORDS = [
+  { text: "GRIT",         color: "#f0f0f0" },
+  { text: "es",           color: "#f0f0f0" },
+  { text: "innovación,",  color: "#00c853" },
+  { text: "precisión",    color: "#00c853" },
+  { text: "y",            color: "#f0f0f0" },
+  { text: "resiliencia",  color: "#00c853" },
 ] as const;
 
 const ORBS = [
@@ -79,7 +82,7 @@ export default function Section4() {
       ))}
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 text-center">
 
         {/* Eyebrow */}
         <div className="mb-10 flex items-center justify-center gap-3">
@@ -101,13 +104,13 @@ export default function Section4() {
 
         {/* Headline */}
         <h2
-          className="text-[clamp(2.8rem,7.5vw,6rem)] font-black leading-[1.05]
+          className="text-[clamp(2rem,8vw,6rem)] font-black leading-[1.1]
                      tracking-[-0.03em] mb-12"
         >
-          {LINES.map((line, i) => (
-            <span key={i} className="block">
-              {line.pre && <span className="text-[#f0f0f0]">{line.pre}</span>}
-              <span style={{ color: line.color }}>{line.word}</span>
+          {WORDS.map((w, i) => (
+            <span key={i} style={{ color: w.color }}>
+              {w.text}
+              {i < WORDS.length - 1 ? " " : ""}
             </span>
           ))}
         </h2>

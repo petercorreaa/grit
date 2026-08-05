@@ -169,19 +169,19 @@ export default function Hero() {
           />
 
           {/* ── Main content ── */}
-          <div className="relative z-10 flex-1 flex items-center pb-14">
+          <div className="relative z-10 flex-1 flex items-center">
             <motion.div
               variants={container}
               initial="hidden"
               animate="show"
-              className="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-16 pb-10 flex flex-col items-center text-center"
+              className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-16 flex flex-col items-center text-center"
             >
 
           {/* Headline */}
           <motion.h1
             variants={fadeUp}
-            className="text-[clamp(1.4rem,6vw,4.5rem)] font-black leading-[1.04]
-                       tracking-[-0.025em] mb-7"
+            className="text-[clamp(2.3rem,10vw,3.5rem)] sm:text-[clamp(1.4rem,6vw,4.5rem)]
+                       font-black leading-[1.04] tracking-[-0.025em] mb-7"
           >
             <span className="block text-[#f0f0f0]">
               Transformamos <span className="text-accent">Información</span>

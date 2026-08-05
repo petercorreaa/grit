@@ -244,6 +244,22 @@ export default function Footer() {
             </span>
 
             <span
+              className="text-sm font-mono"
+              style={{ color: "rgba(138,158,138,0.4)" }}
+            >
+              Powered by{" "}
+              <a
+                href="https://malvec.studio/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent transition-colors duration-200"
+                style={{ color: "rgba(0,200,83,0.55)" }}
+              >
+                MALVEC
+              </a>
+            </span>
+
+            <span
               className="text-sm font-mono tracking-wide"
               style={{ color: "rgba(0,200,83,0.28)" }}
             >

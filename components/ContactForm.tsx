@@ -296,7 +296,7 @@ export default function ContactForm() {
               className="text-[clamp(2.2rem,5vw,3.8rem)] font-black leading-[1.05]
                          tracking-[-0.025em] mb-5 text-ink"
             >
-              Contac<span style={{ color: "#00893a" }}>tanos</span>
+              Contactanos
             </h2>
 
             {/* Subtext */}
